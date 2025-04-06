@@ -1,59 +1,41 @@
-# Python program for finding the majority element in 
-# an array using Moore’s Voting algorithm
+class Solution:
+    # Function to find the majority elements in the array
+    def findMajority(self, nums):
+        n = len(nums)
+        num1, num2, c1, c2 = 0, 0, 0, 0
+        res = []
 
-def findMajority(arr):
-    n = len(arr)
+        # Finding the two most frequent numbers using Boyer-Moore algorithm
+        for x in nums:
+            if x == num1:
+                c1 += 1
+            elif x == num2:
+                c2 += 1
+            elif c1 == 0:
+                num1 = x
+                c1 = 1
+            elif c2 == 0:
+                num2 = x
+                c2 = 1
+            else:
+                c1 -= 1
+                c2 -= 1
 
-    # Initialize two candidates and their counts
-    ele1, ele2 = -1, -1
-    cnt1, cnt2 = 0, 0
+        c1, c2 = 0, 0
+        # Counting the occurrences of num1 and num2
+        for x in nums:
+            if x == num1:
+                c1 += 1
+            elif x == num2:
+                c2 += 1
 
-    for ele in arr:
-        # Increment count for candidate 1
-        if ele1 == ele:
-            cnt1 += 1
-        # Increment count for candidate 2
-        elif ele2 == ele:
-            cnt2 += 1
-        # New candidate 1 if count is zero
-        elif cnt1 == 0:
-            ele1 = ele
-            cnt1 += 1
-        # New candidate 2 if count is zero
-        elif cnt2 == 0:
-            ele2 = ele
-            cnt2 += 1
-        # Decrease counts if neither candidate
-        else:
-            cnt1 -= 1
-            cnt2 -= 1
-
-    res = []
-    cnt1, cnt2 = 0, 0
-
-    # Count the occurrences of candidates
-    for ele in arr:
-        if ele1 == ele:
-            cnt1 += 1
-        if ele2 == ele:
-            cnt2 += 1
-
-    # Add to result if they are majority elements
-    if cnt1 > n / 3:
-        res.append(ele1)
-    if cnt2 > n / 3 and ele1 != ele2:
-        res.append(ele2)
-
-    # Sort the result to maintain consistent output order
-    res.sort()
-    return res
-
-if __name__ == "__main__":
-    arr = [2, 2, 3, 1, 3, 2, 1, 1]
-    res = findMajority(arr)
-    if not res:
-        print("No Majority Elements")
-    else:
-        print("Majority Elements:", end=" ")
-        for ele in res:
-            print(ele, end=" ")
+        # Checking if num1 and num2 are majority elements
+        if c1 > n / 3:
+            res.append(num1)
+        if c2 > n / 3:
+            res.append(num2)
+        res.sort()
+        # If no majority elements, add -1 to the result list
+        # if len(res) == 0:
+        #     res.append(-1)
+        return res
